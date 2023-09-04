@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 
 class control extends ChangeNotifier {
-  String ip = '192.168.1.2';
+  String ip = 'http://192.168.1.2';
   TimeOfDay timestart = TimeOfDay.now();
   TimeOfDay timeend = TimeOfDay.now();
   String timestartnew = '00:00';
@@ -27,7 +27,9 @@ class control extends ChangeNotifier {
   late Box streatbox = Hive.box("streatd");
   late Box build_numbox = Hive.box("build_numd");
   late Box ratingbox = Hive.box("ratingd");
-
+  late Box activebox = Hive.box("actived");
+  late Box powerbox = Hive.box("powerd");
+  late Box monybox = Hive.box("monyd");
   int gender = 0;
 
   String day = '';
@@ -144,7 +146,7 @@ class control extends ChangeNotifier {
   void registernew() async {
     datarigester = null;
     String url =
-        "http://$ip/doctor/view/signupdoc.php?f_name=${f_name.text}&s_name=${s_name.text}&description=${description.text}&salary=${salary.text}&specialty=${specialtyt}&phone=${phone.text}&email=${email.text}&pass=${pass.text}&age=${age.text}&gender=${genderform}&city=${cityt}&area=${area.text}&streat=${streat.text}&build_num=${build_num.text}";
+        "$ip/doctor/view/signupdoc.php?f_name=${f_name.text}&s_name=${s_name.text}&description=${description.text}&salary=${salary.text}&specialty=${specialtyt}&phone=${phone.text}&email=${email.text}&pass=${pass.text}&age=${age.text}&gender=${genderform}&city=${cityt}&area=${area.text}&streat=${streat.text}&build_num=${build_num.text}";
 
     try {
       var responseregister = await http.get(Uri.parse(url));
@@ -172,7 +174,7 @@ class control extends ChangeNotifier {
   void getdata() async {
     data = null;
     String url =
-        "http://$ip/doctor/view/signindoc.php?phone=${phonesignin.text}&pass=${passsignin.text}";
+        "$ip/doctor/view/signindoc.php?phone=${phonesignin.text}&pass=${passsignin.text}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -198,6 +200,9 @@ class control extends ChangeNotifier {
         streatbox.put('streat', '${data[0]['streat']}');
         build_numbox.put('build_num', '${data[0]['number_build']}');
         ratingbox.put('rating', '${data[0]['rating']}');
+        activebox.put('active', '${data[0]['active']}');
+        powerbox.put("power", "${data[0]['power']}");
+        monybox.put("mony", "${data[0]['mony']}");
       }
     } catch (e) {
       print(e);
@@ -215,7 +220,7 @@ class control extends ChangeNotifier {
       {'mes': 'not'}
     ];
     String url =
-        "http://$ip/doctor/view/add_time_work.php?id_doctor=${idbox.get('id')}&start_time=${timestartnew}&end_time=${timeendnew}&day=$day";
+        "$ip/doctor/view/add_time_work.php?id_doctor=${idbox.get('id')}&start_time=${timestartnew}&end_time=${timeendnew}&day=$day";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -236,7 +241,7 @@ class control extends ChangeNotifier {
   void get_work_time() async {
     data_work_time_get = [];
     String url =
-        "http://$ip/doctor/view/get_time_work.php?id_doctor=${idbox.get('id')}";
+        "$ip/doctor/view/get_time_work.php?id_doctor=${idbox.get('id')}";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -308,7 +313,7 @@ class control extends ChangeNotifier {
       {'mes': 'not'}
     ];
     String url =
-        "http://$ip/doctor/view/get_time_work.php?id_doctordelet=${idbox.get('id')}&id_day=${data_work_time_get[idday]['id']}";
+        "$ip/doctor/view/get_time_work.php?id_doctordelet=${idbox.get('id')}&id_day=${data_work_time_get[idday]['id']}";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -334,7 +339,7 @@ class control extends ChangeNotifier {
       {'mes': 'not'}
     ];
     String url =
-        "http://$ip/doctor/view/add_post_doc.php?id_doctor=${idbox.get('id')}&f_name=${f_namebox.get('f_name')}&s_name=${s_namebox.get('s_name')}&post=${post.text}";
+        "$ip/doctor/view/add_post_doc.php?id_doctor=${idbox.get('id')}&f_name=${f_namebox.get('f_name')}&s_name=${s_namebox.get('s_name')}&post=${post.text}";
     post.text = '';
     try {
       var response = await http.get(Uri.parse(url));
@@ -356,7 +361,7 @@ class control extends ChangeNotifier {
   void getmypost() async {
     myposts = [];
     String url =
-        "http://$ip/doctor/view/add_post_doc.php?id_doctor=${idbox.get('id')}&get=get";
+        "$ip/doctor/view/add_post_doc.php?id_doctor=${idbox.get('id')}&get=get";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -385,7 +390,7 @@ class control extends ChangeNotifier {
       {'mes': 'not'}
     ];
     String url =
-        "http://$ip/doctor/view/add_post_doc.php?id_doctor=${idbox.get('id')}&id_post=$idpost";
+        "$ip/doctor/view/add_post_doc.php?id_doctor=${idbox.get('id')}&id_post=$idpost";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -408,7 +413,7 @@ class control extends ChangeNotifier {
   int indexendpost = 1;
   void getallposts() async {
     //posts = [];
-    String url = "http://$ip/doctor/view/get_all_posts.php?id=$indexendpost";
+    String url = "$ip/doctor/view/get_all_posts.php?id=$indexendpost";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -439,7 +444,7 @@ class control extends ChangeNotifier {
     datadoctor = [
       {'mes': 'not'}
     ];
-    String url = "http://$ip/doctor/view/signindoc.php?id=$id_doctor";
+    String url = "$ip/doctor/view/signindoc.php?id=$id_doctor";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -461,7 +466,7 @@ class control extends ChangeNotifier {
       {'mes': 'not'}
     ];
     String url =
-        "http://$ip/doctor/view/get_time_work.php?id_doctor=${id_doctor.toString()}";
+        "$ip/doctor/view/get_time_work.php?id_doctor=${id_doctor.toString()}";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -480,7 +485,7 @@ class control extends ChangeNotifier {
   void getpost_profile_doctor_visit() async {
     post_visit = [];
     String url =
-        "http://$ip/doctor/view/add_post_doc.php?id_doctor=${id_doctor.toString()}&get=get";
+        "$ip/doctor/view/add_post_doc.php?id_doctor=${id_doctor.toString()}&get=get";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -525,8 +530,7 @@ class control extends ChangeNotifier {
   int indexendquistion = 1;
   void getallquistion() async {
     //posts = [];
-    String url =
-        "http://$ip/doctor/view/getallquistion.php?id=$indexendquistion";
+    String url = "$ip/doctor/view/getallquistion.php?id=$indexendquistion";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -563,7 +567,7 @@ class control extends ChangeNotifier {
       {"mes": "not"}
     ];
     String url =
-        "http://$ip/doctor/view/comment.php?id_doctor=${idbox.get('id')}&id_pationt=$id_pationt&f_name=${f_namebox.get('f_name')}&s_name=${s_namebox.get('s_name')}&id_post=$idquistion&comment=${comment.text}";
+        "$ip/doctor/view/comment.php?id_doctor=${idbox.get('id')}&id_pationt=$id_pationt&f_name=${f_namebox.get('f_name')}&s_name=${s_namebox.get('s_name')}&id_post=$idquistion&comment=${comment.text}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -585,7 +589,7 @@ class control extends ChangeNotifier {
   getcommentpost() async {
     Comments = [];
     String url =
-        "http://$ip/doctor/view/comment.php?id_posts=${idquistion.toString()}";
+        "$ip/doctor/view/comment.php?id_posts=${idquistion.toString()}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -613,7 +617,7 @@ class control extends ChangeNotifier {
     ];
     if (date != '' && namepationt != '' && phonepationt != '') {
       String url =
-          "http://$ip/doctor/view/addpationt.php?id_pationt=${idbox.get('id')}&id_doctor=${datadoctor[0]['id']}&name_doctor=${datadoctor[0]['f_name']} ${datadoctor[0]['s_name']}&namepationt=${namepationt.text}&phonepationt=${phonepationt.text}&agepationt=${agepationt.text}&date=$date";
+          "$ip/doctor/view/addpationt.php?id_pationt=${idbox.get('id')}&id_doctor=${datadoctor[0]['id']}&name_doctor=${datadoctor[0]['f_name']} ${datadoctor[0]['s_name']}&namepationt=${namepationt.text}&phonepationt=${phonepationt.text}&agepationt=${agepationt.text}&date=$date";
 
       try {
         var response = await http.get(Uri.parse(url));
@@ -632,21 +636,40 @@ class control extends ChangeNotifier {
 
   //page notifiction
   List reservation = [];
-
+  
   void getpationtreservation() async {
     reservation = [];
     String url =
-        "http://$ip/doctor/view/addpationt.php?id_doc=${idbox.get('id').toString()}";
+        "$ip/doctor/view/addpationt.php?id_doc=${idbox.get('id').toString()}";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
         var responsebody = jsonDecode(response.body);
-        reservation = responsebody;
+        
+          reservation=responsebody;
+        
       }
     } catch (e) {
       print(e);
     }
     print('${reservation}');
+
+    notifyListeners();
+  }
+
+  List icall = [];
+  void makecall(int i) async {
+    String url = "$ip/doctor/view/addpationt.php?id_call=${i}";
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (!response.body.isEmpty) {
+        var responsebody = jsonDecode(response.body);
+        icall = responsebody;
+      }
+    } catch (e) {
+      print(e);
+    }
+    print('${icall}');
 
     notifyListeners();
   }
@@ -672,7 +695,7 @@ class control extends ChangeNotifier {
       {'mes': 0}
     ];
     String url =
-        "http://$ip/doctor/view/addpationt.php?id_doct=${idbox.get('id').toString()}";
+        "$ip/doctor/view/addpationt.php?id_doct=${idbox.get('id').toString()}";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
@@ -731,7 +754,7 @@ class control extends ChangeNotifier {
     ];
     datarigester = null;
     String url =
-        "http://$ip/doctor/view/signupdoc.php?id=${idbox.get('id')}&f_name=${f_name.text}&s_name=${s_name.text}&description=${description.text}&salary=${salary.text}&specialty=${specialtyt}&email=${email.text}&age=${age.text}&city=${cityt}&area=${area.text}&streat=${streat.text}&build_num=${build_num.text}";
+        "$ip/doctor/view/signupdoc.php?id=${idbox.get('id')}&f_name=${f_name.text}&s_name=${s_name.text}&description=${description.text}&salary=${salary.text}&specialty=${specialtyt}&email=${email.text}&age=${age.text}&city=${cityt}&area=${area.text}&streat=${streat.text}&build_num=${build_num.text}";
 
     try {
       var responseregister = await http.get(Uri.parse(url));
@@ -751,7 +774,7 @@ class control extends ChangeNotifier {
   void updatedatahive() async {
     data = null;
     String url =
-        "http://$ip/doctor/view/signindoc.php?phone=${phonebox.get('phone')}&pass=${passbox.get('pass')}";
+        "$ip/doctor/view/signindoc.php?phone=${phonebox.get('phone')}&pass=${passbox.get('pass')}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -789,7 +812,7 @@ class control extends ChangeNotifier {
   void getrating() async {
     rating = null;
     String url =
-        "http://$ip/doctor/view/signindoc.php?phone=${phonebox.get('phone')}&pass=${passbox.get('pass')}";
+        "$ip/doctor/view/signindoc.php?phone=${phonebox.get('phone')}&pass=${passbox.get('pass')}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -804,6 +827,49 @@ class control extends ChangeNotifier {
     }
     print('good');
     print('${rating}');
+    notifyListeners();
+  }
+
+  void check_active() async {
+    data = null;
+    String url =
+        "$ip/doctor/view/signindoc.php?phone=${phonebox.get('phone')}&pass=${passbox.get('pass')}";
+
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (!response.body.isEmpty) {
+        var responsebody = jsonDecode(response.body);
+
+        data = responsebody;
+
+        activebox.put('active', '${data[0]['active']}');
+        powerbox.put("power", "${data[0]['power']}");
+        monybox.put("mony", "${data[0]['mony']}");
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    notifyListeners();
+  }
+
+  List phoneoner = [
+    {'data': '011'}
+  ];
+  void getphone() async {
+    String url = "$ip/doctor/view/getallquistion.php?phone=011";
+
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (!response.body.isEmpty) {
+        var responsebody = jsonDecode(response.body);
+
+        phoneoner = responsebody;
+      }
+    } catch (e) {
+      print(e);
+    }
+
     notifyListeners();
   }
 }

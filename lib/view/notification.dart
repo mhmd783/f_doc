@@ -98,25 +98,47 @@ class _notification extends State<notification> {
                     itemCount: val.reservation.length,
                     itemBuilder: (context, i) {
                       return Card(
+                        color: val.reservation[i]['call'] == 1
+                            ? Colors.white
+                            : const Color.fromARGB(255, 243, 243, 58),
                         margin: EdgeInsets.all(10),
                         elevation: 10,
                         child: ListTile(
+                          onTap: () {
+                            val.makecall(val.reservation[i]['id']);
+                          },
                           leading: IconButton(
                               onPressed: () {
                                 val.call(val.reservation[i]['phone']);
+                                val.makecall(val.reservation[i]['id']);
                                 //val.launchCaller('+201140374362');
                               },
-                              icon: Icon(Icons.call)),
-                          title: Text('${val.reservation[i]['name_pationt']}'),
-                          subtitle: Text('${val.reservation[i]['phone']}'),
-                          trailing: Text('${val.reservation[i]['date_enter']}'),
+                              icon: Icon(
+                                Icons.call,
+                                color: Colors.black,
+                              )),
+                          title: Text(
+                            '${val.reservation[i]['name_pationt']}',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          subtitle: Text('${val.reservation[i]['phone']}',style: TextStyle(
+                              color: Colors.black,
+                            ),),
+                          trailing: Text('${val.reservation[i]['date_enter']}',style: TextStyle(
+                              color: Colors.black,
+                            ),),
                         ),
                       );
                     }),
               )
             : Center(
-                child: 
-                Center(child: Text('لا يوجد بيانات لعرضها ',style: TextStyle(fontSize: 25,color: Colors.grey),)),
+                child: Center(
+                    child: Text(
+                  'لا يوجد بيانات لعرضها ',
+                  style: TextStyle(fontSize: 25, color: Colors.grey),
+                )),
               );
       }),
     );

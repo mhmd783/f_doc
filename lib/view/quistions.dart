@@ -19,7 +19,16 @@ class _quistion extends State<quistion> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<control>(context, listen: false).getnumberpationttoday();
     });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<control>(context, listen: false).check_active();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<control>(context, listen: false).getphone();
+    });
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _shar();
+    });
     super.initState();
   }
 
@@ -378,11 +387,7 @@ class _quistion extends State<quistion> {
                 children: [
                   Center(
                       child: val.checkaddcomment[0]['mes'] == 'not'
-                          ? Text(
-                              'هناك مشكله!!',
-                              style: TextStyle(
-                                  color: Colors.redAccent, fontSize: 15),
-                            )
+                          ? CircularProgressIndicator()
                           : Text(
                               'تم التعليق',
                               style: TextStyle(
@@ -404,6 +409,73 @@ class _quistion extends State<quistion> {
                   onPressed: () {
                     Navigator.of(context).pop();
                     _add_comment();
+                  },
+                );
+              }),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _shar() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: const Text(
+            "رساله",
+            textAlign: TextAlign.end,
+          ),
+          elevation: 10,
+          content: Form(
+            child: Consumer<control>(builder: (context, val, child) {
+              return Column(
+                children: [
+                  Center(
+                    child: int.parse(val.activebox.get("active")) == 0
+                        ? Text(
+                            textAlign: TextAlign.end,
+                            "حسابك متوقف ولحين شحن رصيد لن يصلك اي حجوزات ولن يستيطع اي احد حجز كشف  لحين السداد واعاده التفعيل تواصل مع\n ${val.phoneoner[0]['data']}",
+                            style: TextStyle(
+                                color: Colors.redAccent, fontSize: 15),
+                          )
+                        : Text(
+                            "اهلا بك",
+                            style: TextStyle(
+                                color: Colors.greenAccent, fontSize: 15),
+                          ),
+                  ),
+                  int.parse(val.activebox.get("active")) == 0
+                      ? CircleAvatar(
+                          backgroundColor: Colors.greenAccent.withOpacity(0.9),
+                          child: IconButton(
+                              onPressed: () {
+                                val.call("${val.phoneoner[0]['data']}");
+                              },
+                              icon: Icon(
+                                Icons.call,
+                                color: Colors.black,
+                              )),
+                        )
+                      : Container(),
+                ],
+              );
+            }),
+          ),
+          actions: <Widget>[
+            CircleAvatar(
+              backgroundColor: Colors.grey.shade300,
+              child: Consumer<control>(builder: (context, val, child) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  onPressed: () async {
+                    Navigator.of(context).pop();
                   },
                 );
               }),

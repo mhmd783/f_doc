@@ -283,11 +283,7 @@ class _home extends State<home> {
                             style: TextStyle(
                                 color: Colors.greenAccent, fontSize: 15),
                           )
-                        : Text(
-                            'هناك مشكله!!',
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 15),
-                          ),
+                        : CircularProgressIndicator(),
                   ),
                 ],
               );

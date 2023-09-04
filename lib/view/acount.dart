@@ -22,9 +22,12 @@ class _profile extends State<profile> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<control>(context, listen: false).get_work_time();
     });
-    
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<control>(context, listen: false).getmypost();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<control>(context, listen: false).check_active();
     });
 
     super.initState();
@@ -174,6 +177,42 @@ class _profile extends State<profile> {
                   margin: EdgeInsets.only(left: 40, right: 25, bottom: 10),
                   child: Text(
                     'التخصص: ${val.specialtybox.get('specialty')}',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin:
+                            EdgeInsets.only(left: 40, right: 25, bottom: 10),
+                        child: Text(
+                          'عدد الحجوزات المتاحه: ${val.activebox.get("active")}',
+                          style: TextStyle(
+                              color: int.parse(val.activebox.get("active")) == 0
+                                  ? Colors.redAccent
+                                  : Colors.greenAccent,
+                              fontSize: 15),
+                        ),
+                      ),
+                      Container(
+                        child: Icon(
+                          int.parse(val.activebox.get("active")) == 0
+                              ? Icons.not_accessible
+                              : Icons.accessibility,
+                          size: 35,
+                        ),
+                        margin: EdgeInsets.only(right: 25),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 40, right: 25, bottom: 10),
+                  child: Text(
+                    'سداد مبلغ: ${val.monybox.get('mony')} ',
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                 ),
@@ -566,7 +605,6 @@ class _profile extends State<profile> {
                             margin: EdgeInsets.only(left: 10),
                             child: TextButton(
                                 onPressed: () {
-                                  
                                   val.choseday(i);
                                 },
                                 child: Text(
@@ -671,11 +709,7 @@ class _profile extends State<profile> {
                             style: TextStyle(
                                 color: Colors.greenAccent, fontSize: 15),
                           )
-                        : Text(
-                            'هناك مشكله!!',
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 15),
-                          ),
+                        : CircularProgressIndicator(),
                   ),
                 ],
               );
@@ -721,11 +755,7 @@ class _profile extends State<profile> {
                             style: TextStyle(
                                 color: Colors.greenAccent, fontSize: 15),
                           )
-                        : Text(
-                            'هناك مشكله!!',
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 15),
-                          ),
+                        : CircularProgressIndicator(),
                   ),
                 ],
               );
@@ -817,11 +847,7 @@ class _profile extends State<profile> {
                             style: TextStyle(
                                 color: Colors.greenAccent, fontSize: 15),
                           )
-                        : Text(
-                            'هناك مشكله!!',
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 15),
-                          ),
+                        : CircularProgressIndicator(),
                   ),
                 ],
               );
@@ -914,11 +940,7 @@ class _profile extends State<profile> {
                             style: TextStyle(
                                 color: Colors.greenAccent, fontSize: 15),
                           )
-                        : Text(
-                            'هناك مشكله!!',
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 15),
-                          ),
+                        : CircularProgressIndicator(),
                   ),
                 ],
               );

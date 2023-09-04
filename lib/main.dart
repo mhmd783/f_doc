@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pationt/prov/prov.dart';
 import 'package:pationt/view/home.dart';
 import 'package:pationt/view/notification.dart';
-import 'package:pationt/view/profile.dart';
+import 'package:pationt/view/acount.dart';
 import 'package:pationt/view/profile_doctor_visit.dart';
 import 'package:pationt/view/quistions.dart';
 import 'package:pationt/view/signin.dart';
@@ -32,6 +32,9 @@ void main()async {
   await Hive.openBox('streatd');
   await Hive.openBox('build_numd');
   await Hive.openBox('ratingd');
+  await Hive.openBox('actived');
+  await Hive.openBox('powerd');
+  await Hive.openBox('monyd');
 
   runApp(const MyApp());
 }

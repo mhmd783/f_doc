@@ -795,6 +795,14 @@ class _profile extends State<profile> {
               return Center(
                 child: TextFormField(
                   controller: val.post,
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(
+                          "[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                    ),
+                  ],
+                  maxLength: 250,
                   decoration: InputDecoration(
                     label: Text("المعلومه"),
                   ),
@@ -803,20 +811,33 @@ class _profile extends State<profile> {
             }),
           ),
           actions: <Widget>[
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade300,
+            Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 243, 243, 58),
+                  borderRadius: BorderRadius.circular(10)),
               child: Consumer<control>(builder: (context, val, child) {
-                return IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.black,
+                return MaterialButton(
+                  child: Text(
+                    'نشر',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                   onPressed: () {
                     if (val.post.text != '') {
                       val.addpost();
+                      
+                    }else{
+                        val.postlist = [
+                            {'mes': 'not'}
+                            
+                          ];
+                      
                     }
                     Navigator.of(context).pop();
                     _check_addpost();
+                    
+                    
                     val.getmypost();
                   },
                 );

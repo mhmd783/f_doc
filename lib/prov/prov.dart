@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:image_picker/image_picker.dart';
 
 class control extends ChangeNotifier {
-  String ip = 'http://192.168.1.2';
+  String ip = 'https://mydoctory.net';
+  //String ip = 'http://192.168.1.6';
   TimeOfDay timestart = TimeOfDay.now();
   TimeOfDay timeend = TimeOfDay.now();
   String timestartnew = '00:00';
@@ -30,6 +36,7 @@ class control extends ChangeNotifier {
   late Box activebox = Hive.box("actived");
   late Box powerbox = Hive.box("powerd");
   late Box monybox = Hive.box("monyd");
+  late Box checkbox = Hive.box("checkd");
   int gender = 0;
 
   String day = '';
@@ -203,6 +210,7 @@ class control extends ChangeNotifier {
         activebox.put('active', '${data[0]['active']}');
         powerbox.put("power", "${data[0]['power']}");
         monybox.put("mony", "${data[0]['mony']}");
+        checkbox.put("check", "${data[0]['checkdoctor']}");
       }
     } catch (e) {
       print(e);
@@ -440,6 +448,11 @@ class control extends ChangeNotifier {
   List datadoctor = [
     {'mes': 'not'}
   ];
+  cleandatadoctor() {
+    datadoctor = [];
+    notifyListeners();
+  }
+
   void getdatadoctorvesitprofile() async {
     datadoctor = [
       {'mes': 'not'}
@@ -585,9 +598,17 @@ class control extends ChangeNotifier {
     notifyListeners();
   }
 
-  List Comments = [];
+  List Comments = [
+    {"id": -1}
+  ];
+  refreshcomment() {
+    Comments = [
+      {"id": -2}
+    ];
+    notifyListeners();
+  }
+
   getcommentpost() async {
-    Comments = [];
     String url =
         "$ip/doctor/view/comment.php?id_posts=${idquistion.toString()}";
 
@@ -597,6 +618,10 @@ class control extends ChangeNotifier {
         var responsebody = jsonDecode(response.body);
 
         Comments = responsebody;
+      } else {
+        Comments = [
+          {"id": -1}
+        ];
       }
     } catch (e) {
       print(e);
@@ -635,21 +660,38 @@ class control extends ChangeNotifier {
   }
 
   //page notifiction
-  List reservation = [];
-  
+  List reservation = [
+    {"id": -1}
+  ];
+  refresh() {
+    reservation = [
+      {"id": -2}
+    ];
+    notifyListeners();
+  }
+
   void getpationtreservation() async {
-    reservation = [];
+    reservation = [
+      {"id": -1}
+    ];
+    //reservation = [];
     String url =
         "$ip/doctor/view/addpationt.php?id_doc=${idbox.get('id').toString()}";
     try {
       var response = await http.get(Uri.parse(url));
       if (!response.body.isEmpty) {
         var responsebody = jsonDecode(response.body);
-        
-          reservation=responsebody;
-        
+
+        reservation = responsebody;
+      } else {
+        reservation = [
+          {"id": -1}
+        ];
       }
     } catch (e) {
+      reservation = [
+        {"id": -1}
+      ];
       print(e);
     }
     print('${reservation}');
@@ -865,6 +907,139 @@ class control extends ChangeNotifier {
         var responsebody = jsonDecode(response.body);
 
         phoneoner = responsebody;
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    notifyListeners();
+  }
+
+  //notifiction in os //////////////////////////////
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationPlugin =
+      FlutterLocalNotificationsPlugin();
+  final AndroidInitializationSettings androidInitializationSettings =
+      AndroidInitializationSettings('logo');
+
+  Future<void> initializenotification() async {
+    InitializationSettings initializationSettings =
+        InitializationSettings(android: androidInitializationSettings);
+    await _flutterLocalNotificationPlugin.initialize(initializationSettings);
+    //////////////////////////////////////////////////////////////////////
+    checkNotificationPermission();
+
+    notifyListeners();
+  }
+
+  Future<void> sendoulnotification(String title, String body) async {
+    var androidNotificationDetails = AndroidNotificationDetails(
+      'channelId',
+      'channelName',
+      playSound: true,
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    var notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    await _flutterLocalNotificationPlugin.periodicallyShow(
+        0, title, body, RepeatInterval.everyMinute, notificationDetails);
+    notifyListeners();
+  }
+
+  ///////////////////////////
+  Future<void> checkNotificationPermission() async {
+    final PermissionStatus status = await Permission.notification.status;
+    if (!status.isGranted) {
+      final PermissionStatus result = await Permission.notification.request();
+      if (!result.isGranted) {
+        print('not');
+      }
+    }
+  }
+
+  //image card/////////////////////////////////////
+  File? image;
+  String? base64image;
+  var pickedImage;
+  final imagePicker = ImagePicker();
+
+  Future<void> getphoto() async {
+    pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      image = File(pickedImage.path);
+      List<int> imagebytes = File(pickedImage.path).readAsBytesSync();
+      base64image = base64Encode(imagebytes);
+      debugPrint(base64image);
+      print("length:${base64image?.length}");
+      print("length:${base64image?.length}");
+    } else {
+      // إعلان خيار آخر في حالة عدم تحديد صورة
+      // يمكنك إضافة المزيد من العمليات هنا بناءً على حالتك
+    }
+    notifyListeners();
+  }
+
+  Future<void> getcamera() async {
+    pickedImage = await imagePicker.pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      image = File(pickedImage.path);
+      List<int> imagebytes = File(pickedImage.path).readAsBytesSync();
+      base64image = base64Encode(imagebytes);
+      debugPrint(base64image);
+      print("length:${base64image?.length}");
+      print("length:${base64image?.length}");
+    } else {
+      // إعلان خيار آخر في حالة عدم تحديد صورة
+      // يمكنك إضافة المزيد من العمليات هنا بناءً على حالتك
+    }
+    notifyListeners();
+  }
+
+  String dataimage = 'empty';
+
+  uploadimage() async {
+    String url = "$ip/doctor/view/card.php";
+    try {
+      if (image != null) {
+        var response = await http.post(
+          Uri.parse(url),
+          body: jsonEncode(<String, String>{
+            'image': '$base64image',
+            'id_doctor': idbox.get('id')
+          }),
+        );
+        var responsebody = jsonEncode(response.body);
+        print('out:$responsebody');
+        dataimage = responsebody;
+      } else {
+        dataimage = '\"not\"';
+      }
+    } catch (e) {
+      print(e);
+    }
+    getdata();
+    notifyListeners();
+  }
+
+  uploadeditimage() async {
+    String url = "$ip/doctor/view/card.php";
+    try {
+      if (image != null) {
+        var response = await http.post(
+          Uri.parse(url),
+          body: jsonEncode(<String, String>{
+            'imageedit': '$base64image',
+            'id_doctor': idbox.get('id')
+          }),
+        );
+        var responsebody = jsonEncode(response.body);
+        print('out:$responsebody');
+        dataimage = responsebody;
+      } else {
+        dataimage = '\"not\"';
       }
     } catch (e) {
       print(e);

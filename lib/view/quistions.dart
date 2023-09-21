@@ -16,19 +16,7 @@ class _quistion extends State<quistion> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<control>(context, listen: false).getallquistion();
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<control>(context, listen: false).getnumberpationttoday();
-    });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<control>(context, listen: false).check_active();
-    });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<control>(context, listen: false).getphone();
-    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _shar();
-    });
     super.initState();
   }
 
@@ -55,7 +43,8 @@ class _quistion extends State<quistion> {
                         )),
                     IconButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed("notification");
+                          Navigator.of(context)
+                              .pushReplacementNamed("notification");
                         },
                         icon: Icon(
                           Icons.notification_add_outlined,
@@ -68,7 +57,7 @@ class _quistion extends State<quistion> {
             Expanded(
                 child: IconButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed("profile");
+                      Navigator.of(context).pushReplacementNamed("profile");
                     },
                     icon: Icon(
                       Icons.person_outlined,
@@ -77,7 +66,7 @@ class _quistion extends State<quistion> {
             Expanded(
                 child: IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed("home");
+                Navigator.of(context).pushReplacementNamed("home");
               },
               icon: Icon(Icons.home_outlined, color: Colors.black),
             )),
@@ -200,6 +189,7 @@ class _quistion extends State<quistion> {
                                           IconButton(
                                               onPressed: () {
                                                 val.getidquistion(i);
+                                                val.refreshcomment();
                                                 _add_comment();
                                               },
                                               icon: Icon(
@@ -253,87 +243,110 @@ class _quistion extends State<quistion> {
               return Center(
                 child: Column(
                   children: [
-                    Container(
-                      height: 200,
-                      width: 300,
-                      child: ListView.builder(
-                          itemCount: val.Comments.length,
-                          itemBuilder: (context, i) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(top: 30),
-                                  width: 299,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                          right: 10,
-                                        ),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            //val.getiddoctor(i);
-                                            // Navigator.of(context)
-                                            //     .pushNamed('profile_doctor_visit');
-                                          },
-                                          child: TextButton(
-                                            onPressed: () {
-                                              val.getiddoctorfromcomment(i);
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pushNamed(
-                                                  'profile_doctor_visit');
-                                            },
+                    val.Comments[0]['id'] == -1
+                        ? Center(
+                            child: Text("لا يوجد تعليقات"),
+                          )
+                        : val.Comments[0]['id'] == -2
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Container(
+                                height: 200,
+                                width: 300,
+                                child: ListView.builder(
+                                    itemCount: val.Comments.length,
+                                    itemBuilder: (context, i) {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: 30),
+                                            width: 299,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                    right: 10,
+                                                  ),
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      //val.getiddoctor(i);
+                                                      // Navigator.of(context)
+                                                      //     .pushNamed('profile_doctor_visit');
+                                                    },
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        val.getiddoctorfromcomment(
+                                                            i);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        Navigator.of(context)
+                                                            .pushNamed(
+                                                                'profile_doctor_visit');
+                                                      },
+                                                      child: Text(
+                                                        "د: ${val.Comments[i]['f_name']} ${val.Comments[i]['s_name']}",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 20, bottom: 10),
+                                                  child: CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundColor:
+                                                          Color.fromRGBO(
+                                                              243, 243, 58, 1),
+                                                      child: Icon(
+                                                        Icons.person,
+                                                        color: Colors.black,
+                                                        size: 20,
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.topRight,
+                                            margin: EdgeInsets.only(
+                                                left: 40, right: 40),
                                             child: Text(
-                                              "د: ${val.Comments[i]['f_name']} ${val.Comments[i]['s_name']}",
+                                              '${val.Comments[i]['comment']} ',
                                               style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                              ),
+                                              maxLines: 10,
                                               textAlign: TextAlign.end,
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            right: 20, bottom: 10),
-                                        child: CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    255, 243, 243, 58),
-                                            child: Icon(
-                                              Icons.person,
-                                              color: Colors.black,
-                                              size: 20,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topRight,
-                                  margin: EdgeInsets.only(left: 40, right: 40),
-                                  child: Text(
-                                    '${val.Comments[i]['comment']} ',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                    ),
-                                    maxLines: 10,
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ),
-                              ],
-                            );
-                          }),
-                    ),
+                                        ],
+                                      );
+                                    }),
+                              ),
                     TextFormField(
-                      maxLength: 150,
                       controller: val.comment,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(
+                              "[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                        ),
+                      ],
+                      maxLength: 150,
                       decoration: InputDecoration(
                         label: Text("التعليق"),
                       ),
@@ -344,13 +357,16 @@ class _quistion extends State<quistion> {
             }),
           ),
           actions: <Widget>[
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade300,
+            Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(
+                                                        255, 243, 243, 58),
+                  borderRadius: BorderRadius.circular(10)),
               child: Consumer<control>(builder: (context, val, child) {
-                return IconButton(
-                  icon: Icon(
-                    Icons.send,
-                    color: Colors.black,
+                return MaterialButton(
+                  child: Text(
+                    'ارسال التعليق',
+                    style: TextStyle(color: Colors.black),
                   ),
                   onPressed: () {
                     if (val.comment.text != '') {
@@ -359,6 +375,10 @@ class _quistion extends State<quistion> {
                       Navigator.of(context).pop();
                       _check_add_comment();
                     } else {
+                      val.checkaddcomment = [
+                        {"mes": "not"}
+                      ];
+
                       _check_add_comment();
                     }
                   },
@@ -409,73 +429,6 @@ class _quistion extends State<quistion> {
                   onPressed: () {
                     Navigator.of(context).pop();
                     _add_comment();
-                  },
-                );
-              }),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _shar() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          title: const Text(
-            "رساله",
-            textAlign: TextAlign.end,
-          ),
-          elevation: 10,
-          content: Form(
-            child: Consumer<control>(builder: (context, val, child) {
-              return Column(
-                children: [
-                  Center(
-                    child: int.parse(val.activebox.get("active")) == 0
-                        ? Text(
-                            textAlign: TextAlign.end,
-                            "حسابك متوقف ولحين شحن رصيد لن يصلك اي حجوزات ولن يستيطع اي احد حجز كشف  لحين السداد واعاده التفعيل تواصل مع\n ${val.phoneoner[0]['data']}",
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 15),
-                          )
-                        : Text(
-                            "اهلا بك",
-                            style: TextStyle(
-                                color: Colors.greenAccent, fontSize: 15),
-                          ),
-                  ),
-                  int.parse(val.activebox.get("active")) == 0
-                      ? CircleAvatar(
-                          backgroundColor: Colors.greenAccent.withOpacity(0.9),
-                          child: IconButton(
-                              onPressed: () {
-                                val.call("${val.phoneoner[0]['data']}");
-                              },
-                              icon: Icon(
-                                Icons.call,
-                                color: Colors.black,
-                              )),
-                        )
-                      : Container(),
-                ],
-              );
-            }),
-          ),
-          actions: <Widget>[
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade300,
-              child: Consumer<control>(builder: (context, val, child) {
-                return IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
                   },
                 );
               }),

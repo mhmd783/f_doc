@@ -34,7 +34,9 @@ dependencies:
   jiffy: ^6.2.1
   hive: 
   hive_flutter: 
-  
+  flutter_local_notifications: ^15.1.1
+  permission_handler: ^11.0.0
+  image_picker: ^1.0.4
   
   
 
@@ -79,6 +81,7 @@ flutter:
   assets:
     - images/logo.png
     - images/back1.png
+    - images/card.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

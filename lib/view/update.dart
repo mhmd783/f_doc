@@ -32,6 +32,13 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.f_name,
                         keyboardType: TextInputType.name,
+                        
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 8,
                         decoration: InputDecoration(
                           label: Text("اسمك"),
                         ),
@@ -42,6 +49,12 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.s_name,
                         keyboardType: TextInputType.name,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 8,
                         decoration: InputDecoration(
                           label: Text("اسم الاب"),
                         ),
@@ -52,6 +65,12 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.description,
                         keyboardType: TextInputType.name,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 250,
                         decoration: InputDecoration(
                           label: Text("وصف ليك"),
                         ),
@@ -60,6 +79,7 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.salary,
                         keyboardType: TextInputType.number,
+                        maxLength: 4,
                         decoration: InputDecoration(
                           label: Text("سعر الكشف"),
                         ),
@@ -115,6 +135,8 @@ class _update extends State<update> {
                       TextFormField(
                         controller:val.email,
                         keyboardType: TextInputType.emailAddress,
+                        
+                        maxLength: 250,
                         decoration: InputDecoration(
                           label: Text("ايميلك"),
                         ),
@@ -127,6 +149,7 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.age,
                         keyboardType: TextInputType.number,
+                        maxLength: 3,
                         decoration: InputDecoration(
                           label: Text("عمرك"),
                         ),
@@ -176,6 +199,12 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.area,
                         keyboardType: TextInputType.streetAddress,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 20,
                         decoration: InputDecoration(
                           label: Text("المنطقه"),
                         ),
@@ -187,6 +216,12 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.streat,
                         keyboardType: TextInputType.streetAddress,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 20,
                         decoration: InputDecoration(
                           label: Text("الشارع"),
                         ),
@@ -198,6 +233,7 @@ class _update extends State<update> {
                       TextFormField(
                         controller: val.build_num,
                         keyboardType: TextInputType.number,
+                        maxLength: 8,
                         decoration: InputDecoration(
                           label: Text("رقم العماره "),
                         ),

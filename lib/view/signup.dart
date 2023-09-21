@@ -38,6 +38,12 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.f_name,
                         keyboardType: TextInputType.name,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength:10,
                         decoration: InputDecoration(
                           label: Text("اسمك"),
                         ),
@@ -48,6 +54,12 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.s_name,
                         keyboardType: TextInputType.name,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 10,
                         decoration: InputDecoration(
                           label: Text("اسم الاب"),
                         ),
@@ -58,6 +70,12 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.description,
                         keyboardType: TextInputType.name,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 250,
                         decoration: InputDecoration(
                           label: Text("وصف ليك"),
                         ),
@@ -65,23 +83,24 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.salary,
                         keyboardType: TextInputType.number,
+                        
+                        maxLength: 4,
                         decoration: InputDecoration(
                           label: Text("سعر الكشف"),
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'\d')),
                         ],
-                        
                       ),
                       Container(
                         margin: EdgeInsets.all(10),
                         child: Text(
-                        'اختار التخصص',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                                          ),
+                          'اختار التخصص',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      
+
                       Container(
                         width: 300,
                         height: 40,
@@ -93,7 +112,8 @@ class _signup extends State<signup> {
                                 decoration: BoxDecoration(
                                     color: val.indspecialty == i
                                         ? Colors.grey
-                                        : const Color.fromARGB(255, 243, 243, 58),
+                                        : const Color.fromARGB(
+                                            255, 243, 243, 58),
                                     borderRadius: BorderRadius.circular(50)),
                                 margin: EdgeInsets.only(left: 10),
                                 child: TextButton(
@@ -112,10 +132,11 @@ class _signup extends State<signup> {
                       SizedBox(
                         height: 20,
                       ),
-                      
+
                       TextFormField(
                         controller: val.phone,
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.number,
+                        maxLength: 11,
                         decoration: InputDecoration(
                           label: Text("رقم تلفونك"),
                         ),
@@ -127,8 +148,9 @@ class _signup extends State<signup> {
                         height: 20,
                       ),
                       TextFormField(
-                        controller:val.email,
+                        controller: val.email,
                         keyboardType: TextInputType.emailAddress,
+                        maxLength: 250,
                         decoration: InputDecoration(
                           label: Text("ايميلك"),
                         ),
@@ -139,9 +161,10 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.pass,
                         obscureText: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        maxLength: 8,
                         decoration: InputDecoration(
-                          label: Text("كلمه السر"),
+                          label: Text("الرقم السري"),
                         ),
                       ),
                       SizedBox(
@@ -149,11 +172,12 @@ class _signup extends State<signup> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          label: Text("تكرار كلمه السر"),
+                          label: Text("تكرار الرقم السري"),
                         ),
                         controller: val.pass1,
                         obscureText: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        maxLength: 8,
                       ),
                       SizedBox(
                         width: 12,
@@ -162,6 +186,7 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.age,
                         keyboardType: TextInputType.number,
+                        maxLength: 3,
                         decoration: InputDecoration(
                           label: Text("عمرك"),
                         ),
@@ -189,7 +214,8 @@ class _signup extends State<signup> {
                                 decoration: BoxDecoration(
                                     color: val.indcity == i
                                         ? Colors.grey
-                                        : const Color.fromARGB(255, 243, 243, 58),
+                                        : const Color.fromARGB(
+                                            255, 243, 243, 58),
                                     borderRadius: BorderRadius.circular(50)),
                                 margin: EdgeInsets.only(left: 10),
                                 child: TextButton(
@@ -211,10 +237,15 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.area,
                         keyboardType: TextInputType.streetAddress,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 255,
                         decoration: InputDecoration(
                           label: Text("المنطقه"),
                         ),
-                        
                       ),
                       SizedBox(
                         height: 20,
@@ -222,10 +253,15 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.streat,
                         keyboardType: TextInputType.streetAddress,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp("[a-zA-Z0-9\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFD\uFE70-\uFE74\uFE76-\uFEFC ]"),
+                          ),
+                        ],
+                        maxLength: 255,
                         decoration: InputDecoration(
                           label: Text("الشارع"),
                         ),
-                        
                       ),
                       SizedBox(
                         height: 20,
@@ -233,15 +269,15 @@ class _signup extends State<signup> {
                       TextFormField(
                         controller: val.build_num,
                         keyboardType: TextInputType.number,
+                        maxLength: 8,
                         decoration: InputDecoration(
                           label: Text("رقم العماره "),
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'\d')),
                         ],
-                        
                       ),
-                      
+
                       SizedBox(
                         height: 20,
                       ),
@@ -252,11 +288,12 @@ class _signup extends State<signup> {
                             radius: 25,
                             backgroundColor: val.gender == 1
                                 ? const Color.fromARGB(255, 243, 243, 58)
-                                : Colors.white,
+                                : Colors.grey.withOpacity(0.9),
                             child: IconButton(
                               icon: Icon(
                                 Icons.male,
                                 size: 30,
+                                color: Colors.black,
                               ),
                               onPressed: () {
                                 val.chosegender('male');
@@ -268,11 +305,12 @@ class _signup extends State<signup> {
                             radius: 25,
                             backgroundColor: val.gender == 2
                                 ? const Color.fromARGB(255, 243, 243, 58)
-                                : Colors.white,
+                                : Colors.grey.withOpacity(0.9),
                             child: IconButton(
                               icon: Icon(
                                 Icons.female,
                                 size: 30,
+                                color: Colors.black,
                               ),
                               onPressed: () {
                                 val.chosegender('fmale');
@@ -287,18 +325,18 @@ class _signup extends State<signup> {
                       MaterialButton(
                         onPressed: () async {
                           if (val.f_name.text != '' &&
-                              val.s_name.text != ''&&
-                              val.description.text != ''&&
-                              val.salary.text != ''&&
-                              val.specialtyt != ''&&
-                              val.cityt != ''&&
+                              val.s_name.text != '' &&
+                              val.description.text != '' &&
+                              val.salary.text != '' &&
+                              val.specialtyt != '' &&
+                              val.cityt != '' &&
                               val.phone.text.length > 10 &&
-                              val.email.text != ''&&
+                              val.email.text != '' &&
                               val.age.text != '' &&
                               val.pass.text == val.pass1.text &&
-                              val.area.text != ''&&
-                              val.streat.text != ''&&
-                              val.build_num.text != ''&&
+                              val.area.text != '' &&
+                              val.streat.text != '' &&
+                              val.build_num.text != '' &&
                               val.genderform != '') {
                             val.registernew();
 
@@ -332,8 +370,6 @@ class _signup extends State<signup> {
       ),
     );
   }
-
-  
 
   Future<void> _check() async {
     return showDialog<void>(

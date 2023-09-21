@@ -8,6 +8,7 @@ import 'package:pationt/view/quistions.dart';
 import 'package:pationt/view/signin.dart';
 import 'package:pationt/view/signup.dart';
 import 'package:pationt/view/update.dart';
+import 'package:pationt/view/uploadcard.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -35,6 +36,7 @@ void main()async {
   await Hive.openBox('actived');
   await Hive.openBox('powerd');
   await Hive.openBox('monyd');
+  await Hive.openBox('checkd');
 
   runApp(const MyApp());
 }
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     late Box idbox = Hive.box("idd");
+    late Box checkbox = Hive.box("checkd");
     // if (int.parse(idbox.get('id')) >= 0) {
     //   Navigator.of(context).pushReplacementNamed('quistion');
     // }
@@ -64,9 +67,11 @@ class MyApp extends StatelessWidget {
         'profile_doctor_visit':(context) =>profile_doctor_visit(),
         'quistion':(context) => quistion(),
         'notification':(context) => notification(),
-        'update':(context) => update()
+        'update':(context) => update(),
+        'card':(context) => card(),
       },
-      home: idbox.get('id') !=null&&idbox.get('id') !=''?quistion():signin(),
+      home: idbox.get('id') !=null&&idbox.get('id') !=''&&checkbox.get('check')=='2'?notification():signin(),
+      
     ));
   }
 }

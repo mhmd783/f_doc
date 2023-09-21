@@ -35,7 +35,8 @@ class _signin extends State<signin> {
                   Text("Doctor Login", style: TextStyle(fontSize: 30)),
                   TextFormField(
                     controller: val.phonesignin,
-                    keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.number,
+                    maxLength: 11,
                     decoration: InputDecoration(
                       label: Text("رقم التلفون"),
                     ),
@@ -49,7 +50,8 @@ class _signin extends State<signin> {
                   TextFormField(
                     controller: val.passsignin,
                     obscureText: true,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.number,
+                    maxLength: 8,
                     decoration: InputDecoration(
                       label: Text("كلمه السر"),
                     ),
@@ -60,7 +62,7 @@ class _signin extends State<signin> {
                   MaterialButton(
                     onPressed: () async {
                       val.getdata();
-                      
+
                       _check();
                     },
                     child: Text(
@@ -121,7 +123,12 @@ class _signin extends State<signin> {
                         child: Text("دخول"),
                         onPressed: () {
                           Navigator.of(context).pop();
-                          Navigator.of(context).pushReplacementNamed("profile");
+                          val.checkbox.get('check') == '0' ||
+                                  val.checkbox.get('check') == '1'
+                              ? Navigator.of(context)
+                                  .pushReplacementNamed("card")
+                              : Navigator.of(context)
+                                  .pushReplacementNamed("profile");
                         },
                       ),
                     )
